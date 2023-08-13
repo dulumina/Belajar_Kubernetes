@@ -15,7 +15,10 @@ langkah-langkah umum yang untuk menginstal Kubernetes menggunakan kubeadm dengan
 2.  Update sistem dan instal dependensi yang diperlukan:
         
     ```
-    sudo apt update sudo apt install -y apt-transport-https curl
+    sudo apt update
+    ```
+    ```
+    sudo apt install -y apt-transport-https curl
     ```
     
 3.  Tambahkan repository Kubernetes dan instal kubeadm, kubelet, dan kubectl:
