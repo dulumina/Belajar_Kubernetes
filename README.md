@@ -80,4 +80,13 @@ apt-add-repository "deb http://apt.kubernetes.io/ kubernetes-xenial main" >/dev/
 ```apt install -qq -y kubeadm=1.26.0-00 kubelet=1.26.0-00 kubectl=1.26.0-00 >/dev/null 2>&1```
 
 
-## Kube Master 
+## Kube Master
+
+### 1 Pull required containers
+`kubeadm config images pull`
+
+### 2 Initialize Kubernetes Cluster
+`kubeadm init --apiserver-advertise-address=192.168.56.31 --pod-network-cidr=192.168.0.0/16`
+
+### 3 Deploy Calico network
+`kubectl --kubeconfig=/etc/kubernetes/admin.conf create -f https://docs.projectcalico.org/v3.18/manifests/calico.yaml`
