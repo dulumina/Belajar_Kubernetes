@@ -20,14 +20,18 @@ langkah-langkah umum yang untuk menginstal Kubernetes menggunakan kubeadm dengan
     
 3.  Tambahkan repository Kubernetes dan instal kubeadm, kubelet, dan kubectl:
         
-    ```curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add - sudo sh -c 'echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kub
-    ernetes.list' sudo apt update sudo apt install -y kubeadm kubelet kubectl
+    ```
+    curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+    sudo sh -c 'echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list'
+    sudo apt update
+    sudo apt install -y kubeadm kubelet kubectl
     ```
     
 4.  Nonaktifkan swap space:
     
     ```
-    sudo swapoff -a sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+    sudo swapoff -a
+    sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
     ```
     
 
@@ -41,8 +45,17 @@ langkah-langkah umum yang untuk menginstal Kubernetes menggunakan kubeadm dengan
     
 2.  Konfigurasi HAProxy (`/etc/haproxy/haproxy.cfg`) untuk meneruskan lalu lintas ke master node:
         
-    ```frontend k8s-frontend     bind 192.168.56.31:6443     mode tcp     default_backend k8s-backend backend k8s-backend     mode tcp     balance roundrobin     server kube-master-01 192
-    .168.56.11:6443 check     server kube-master-02 192.168.56.12:6443 check
+    ```
+    frontend k8s-frontend
+        bind 192.168.56.31:6443
+        mode tcp
+        default_backend k8s-backend
+
+    backend k8s-backend
+        mode tcp
+        balance roundrobin
+        server kube-master-01 192.168.56.11:6443 check
+        server kube-master-02 192.168.56.12:6443 check
     ```
     
 3.  Restart HAProxy:
@@ -56,8 +69,8 @@ langkah-langkah umum yang untuk menginstal Kubernetes menggunakan kubeadm dengan
 
 1.  Pada setiap node master (kube-master-01 dan kube-master-02), inisialisasi Kubernetes menggunakan kubeadm di salah satu node:
     
-    ```sudo kubeadm init --control-plane-endpoint "192.168.56.31:6443" --upload-certs --a
-    piserver-advertise-address=192.168.56.11
+    ```
+    sudo kubeadm init --control-plane-endpoint "192.168.56.31:6443" --upload-certs --apiserver-advertise-address=192.168.56.11
     ```
     
     Simpan perintah `kubeadm join` yang dihasilkan.
